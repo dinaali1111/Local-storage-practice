@@ -1,37 +1,40 @@
+// Get all list items and the experiment div
+const listItems = document.querySelectorAll(".color-list__item");
+const experimentDiv = document.querySelector(".experiment");
 
+// Retrieve saved color from localStorage
+const savedColor = window.localStorage.getItem("color");
 
+if (savedColor) {
+  experimentDiv.style.backgroundColor = savedColor;
 
-let lis =document.querySelectorAll("ul li")
-let div =document.querySelector(".experiment")
+  // Remove 'color-list__item--active' class from all list items
+  listItems.forEach((item) => {
+    item.classList.remove("color-list__item--active");
+  });
 
-
-
-
-if (window.localStorage.getItem("color"))
-    {
-
-    div.style.backgroundColor=window.localStorage.getItem("color")
-lis.forEach((li) => {
-
-    li.classList.remove("active")
-})
-document.querySelector(`[data-color="${window.localStorage.getItem("color")}"]`).classList.add("active");
-}else{
-    console.log("no")
+  const activeItem = document.querySelector(`[data-color="${savedColor}"]`);
+  if (activeItem) {
+    activeItem.classList.add("color-list__item--active");
+  }
 }
 
+// Add click event listener to each list item
+listItems.forEach((item) => {
+  item.addEventListener("click", (event) => {
+    // Remove 'color-list__item--active' class from all list items
+    listItems.forEach((item) => {
+      item.classList.remove("color-list__item--active");
+    });
 
+    // Add 'color-list__item--active' class to the clicked list item
+    const clickedItem = event.currentTarget;
+    clickedItem.classList.add("color-list__item--active");
 
-lis.forEach((li)=>{
-    li.addEventListener('click', (e)=>{
-lis.forEach((li) => {
+    // Save the clicked item's color to localStorage
+    const color = clickedItem.dataset.color;
+    window.localStorage.setItem("color", color);
 
-        li.classList.remove("active")
-})
-e.currentTarget.classList.add("active")
-window.localStorage.setItem("color",e.currentTarget.dataset.color)
-div.style.backgroundColor=e.currentTarget.dataset.color
-
-    })
-
-})
+    experimentDiv.style.backgroundColor = color;
+  });
+});
